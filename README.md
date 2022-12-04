@@ -34,6 +34,8 @@ What did I learn?
 
 ## Usage
 
+Heroku Link: https://notetakerio.herokuapp.com/
+
 ![NoteTaker Example](images/notetakerIO.png)
 
 ## Contributing
