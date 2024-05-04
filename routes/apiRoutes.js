@@ -1,34 +1,58 @@
 const router = require('express').Router();
-let notes = require('../db/db.json');
-const fs = require('fs');
-const path = require('path');
-const { uid } = require('uid');
+const store = require('../db/store');
 
 // sends data from notes as a .json file that index.js reads to display data
 router.get('/notes', (req, res) => {
-  res.json(notes);
+    store
+        .getNotes('/notes', (req, res) => {})
+        .then((notes) => {
+            return res.json(notes);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
 });
 
 // takes data from html and then saves it with title, text, and custom id ot be then written back on the db.json file
 router.post('/notes', (req, res) => {
-  let saveNote = {
-    title: req.body.title,
-    text: req.body.text,
-    id: uid(),
-  };
+    store
+        .addNote(req.body)
+        .then((note) => res.json(note))
+        .catch((err) => {
+            res.status(500).json(err);
+        });
+});
 
-  // adds the new file to notes and rewrites the file back to db.json. Using fs.writeFile gets rid of the file there and replaces it with another so we have to add data to the notes array and then rewrite it.
-  notes.push(saveNote);
-  fs.writeFile(
-    path.join(__dirname, '../db', 'db.json'),
-    JSON.stringify(notes),
-    err => {
-      if (err) {
-        console.log(err);
-      }
-      res.json(notes);
-    },
-  );
+// deletes the note with an id equal to req.params.id
+router.delete('/notes/:id', (req, res) => {
+    store
+        .removeNote(req.params.id)
+        .then(() => res.json({ ok: true }))
+        .catch((err) => res.status(500).json(err));
+});
+
+router.put('/notes/:id', (req, res) => {
+    const { id } = req.params;
+    const { title, text } = req.body;
+
+    store
+        .getNotes()
+        .then((notes) => {
+            // Find the note with the given id
+            const noteToUpdate = notes.find((note) => note.id === id);
+            if (!noteToUpdate) {
+                throw new Error(`Note with id ${id} not found`);
+            }
+
+            // Update the note's title and text
+            noteToUpdate.title = title;
+            noteToUpdate.text = text;
+
+            // Write the updated notes to the database
+            return store.write(notes);
+        })
+        .then(() => res.json({ ok: true }))
+        .catch((err) => res.status(500).json(err));
 });
 
 module.exports = router;
