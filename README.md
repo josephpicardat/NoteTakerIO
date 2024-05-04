@@ -8,11 +8,11 @@ What was my motivation?
 
 Why did I build this project?
 
-- To create a simple note taking app that stores data in the backend instead of local storage
+- To create a simple note-taking app that stores data in the backend instead of local storage
 
 What problem does it solve?
 
-- Allowing everyone to see the data even with different computers/browers
+- Allowing everyone to see the data even with different computers/browsers
 
 What did I learn?
 
@@ -30,7 +30,7 @@ What did I learn?
 ## Installation
 
 - Step 1: If downloaded locally, open up the integrated terminal and type 'npm i' to install dependencies
-- Step 2: Then type 'npm run start' to start the application.
+- Step 2: Type 'npm run start' to start the application.
 
 ## Usage
 
@@ -50,7 +50,7 @@ No tests
 
 Github Profile: josephpicardat
 
-If you need to reach me, you can with through my email: josephpicardat1@gmail.com
+If you need to reach me, you can through my email: josephpicardat1@gmail.com
 
 ## License
 
